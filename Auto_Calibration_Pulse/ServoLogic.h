@@ -1,7 +1,7 @@
 #ifndef SERVO_LOGIC_H
 #define SERVO_LOGIC_H
 
-#include "Servolimits.h"  // Contains the servoLimits array :contentReference[oaicite:0]{index=0}&#8203;:contentReference[oaicite:1]{index=1}
+#include "ServoLimits.h"
 
 // Define the positions for which we want to update the servo pulses.
 enum Position {
