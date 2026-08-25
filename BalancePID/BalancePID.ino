@@ -1,9 +1,9 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 #include <MPU6050_tockn.h>
-#include "servolimits.h"
+#include "ServoLimits.h"
 #include "pid_config.h"
-#include "helpers.h"
+#include "Helpers.h"
 
 // Create objects for the MPU6050 and the PCA9685 PWM driver
 MPU6050 mpu6050(Wire);
@@ -82,6 +82,9 @@ void loop() {
   // Compute time difference (dt) in seconds
   unsigned long currentTime = millis();
   float dt = (currentTime - previousTime) / 1000.0;
+  if (dt <= 0.0f) {
+    dt = 0.001f;
+  }
   previousTime = currentTime;
   
   // --- PID Calculation for Pitch ---
