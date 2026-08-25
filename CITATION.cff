@@ -3,8 +3,8 @@ message: "If you use this software in academic work, please cite it as below."
 title: "Rombotics Q8: IMU-Based Static Stabilization for a Low-Cost Quadruped"
 version: 1.0.0
 date-released: 2026-08-25
-url: "https://github.com/romil0001/rombotics-q8"
-repository-code: "https://github.com/romil0001/rombotics-q8"
+url: "https://github.com/romil0001/q8-quadruped-imu-stabilization"
+repository-code: "https://github.com/romil0001/q8-quadruped-imu-stabilization"
 license: MIT
 type: software
 keywords:

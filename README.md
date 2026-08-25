@@ -77,7 +77,7 @@ Full protocol: [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)
 ## Repository Structure
 
 ```
-rombotics-q8/
+q8-quadruped-imu-stabilization/
 ├── BalancePID/              Primary stabilization controller (research artifact)
 ├── Calibrate/               Joint calibration CLI
 ├── docs/
@@ -98,11 +98,11 @@ Experimental prototypes (`Trail/`, `stablisingrobotpid/`, etc.) are retained as 
 ## Citation
 
 ```bibtex
-@software{rombotics_q8_2026,
+@software{q8_quadruped_imu_stabilization_2026,
   author    = {romil0001},
   title     = {Rombotics Q8: IMU-Based Static Stabilization for a Low-Cost Quadruped},
   year      = {2026},
-  url       = {https://github.com/romil0001/rombotics-q8},
+  url       = {https://github.com/romil0001/q8-quadruped-imu-stabilization},
   version   = {1.0.0}
 }
 ```

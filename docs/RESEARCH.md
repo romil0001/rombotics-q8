@@ -1,6 +1,6 @@
 # Research Overview
 
-**Repository:** [rombotics-q8](https://github.com/romil0001/rombotics-q8)  
+**Repository:** [q8-quadruped-imu-stabilization](https://github.com/romil0001/q8-quadruped-imu-stabilization)  
 **Platform:** Rombotics Q8 — low-cost 8-DOF quadruped testbed  
 **Primary contribution:** Open, reproducible firmware for IMU-driven static pose stabilization on a four-legged servo platform
 
@@ -174,11 +174,11 @@ Enable CSV serial logging in `BalancePID/pid_config.h` (`RESEARCH_LOG 1`) to cap
 If you use this repository in academic work, cite it using [CITATION.cff](../CITATION.cff) or:
 
 ```bibtex
-@software{rombotics_q8_2026,
+@software{q8_quadruped_imu_stabilization_2026,
   author    = {romil0001},
   title     = {Rombotics Q8: IMU-Based Static Stabilization for a Low-Cost Quadruped},
   year      = {2026},
-  url       = {https://github.com/romil0001/rombotics-q8},
+  url       = {https://github.com/romil0001/q8-quadruped-imu-stabilization},
   version   = {1.0.0}
 }
 ```

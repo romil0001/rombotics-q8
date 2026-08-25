@@ -21,8 +21,8 @@ This guide enables independent replication of the Rombotics Q8 stabilization exp
 ## Step 1 — Clone and Configure Environment
 
 ```bash
-git clone https://github.com/romil0001/rombotics-q8.git
-cd rombotics-q8
+git clone https://github.com/romil0001/q8-quadruped-imu-stabilization.git
+cd q8-quadruped-imu-stabilization
 git checkout main   # or the release tag / commit under study
 ```
 
