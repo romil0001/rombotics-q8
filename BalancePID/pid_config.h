@@ -1,6 +1,10 @@
 #ifndef PID_CONFIG_H
 #define PID_CONFIG_H
 
+// Set to 1 to emit CSV-formatted serial data for research logging (115200 baud).
+// Columns: time_ms,pitch,roll,yaw,pid_pitch,pid_roll,pid_yaw,smooth_pitch,smooth_roll,smooth_yaw
+#define RESEARCH_LOG 0
+
 // --- PID control parameters for Pitch (forward/backward tilt) ---
 const float kp_pitch = 1.5;
 const float ki_pitch = 0.1;

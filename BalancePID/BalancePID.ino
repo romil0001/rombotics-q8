@@ -154,7 +154,24 @@ void loop() {
   pca9685.setPWM(0, 0, pwmLFBottom);  // Left Front Bottom
   pca9685.setPWM(1, 0, pwmLRBottom);  // Left Rear Bottom
   
-  // Optional: Debug output to the serial monitor
+  // Research data logging (CSV) or debug output
+#if RESEARCH_LOG
+  static bool csvHeaderSent = false;
+  if (!csvHeaderSent) {
+    Serial.println("time_ms,pitch,roll,yaw,pid_pitch,pid_roll,pid_yaw,smooth_pitch,smooth_roll,smooth_yaw");
+    csvHeaderSent = true;
+  }
+  Serial.print(currentTime); Serial.print(',');
+  Serial.print(pitch); Serial.print(',');
+  Serial.print(roll); Serial.print(',');
+  Serial.print(yaw); Serial.print(',');
+  Serial.print(pidOutputPitch); Serial.print(',');
+  Serial.print(pidOutputRoll); Serial.print(',');
+  Serial.print(pidOutputYaw); Serial.print(',');
+  Serial.print(smoothedPIDPitch); Serial.print(',');
+  Serial.print(smoothedPIDRoll); Serial.print(',');
+  Serial.println(smoothedPIDYaw);
+#else
   Serial.print("Pitch: "); Serial.print(pitch);
   Serial.print("  Roll: "); Serial.print(roll);
   Serial.print("  Yaw: "); Serial.print(yaw);
@@ -164,5 +181,6 @@ void loop() {
   Serial.print("  Smoothed Roll: "); Serial.print(smoothedPIDRoll);
   Serial.print("  PID Yaw: "); Serial.print(pidOutputYaw);
   Serial.print("  Smoothed Yaw: "); Serial.println(smoothedPIDYaw);
+#endif
   delay(10);
 }
