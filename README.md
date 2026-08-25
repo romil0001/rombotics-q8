@@ -2,6 +2,8 @@
 
 **IMU-based static stabilization for a low-cost 8-DOF quadruped robot**
 
+**Repository:** https://github.com/romil0001/Q8_Quadruped_IMU_Stabilization
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Research Docs](https://img.shields.io/badge/docs-research-green.svg)](docs/RESEARCH.md)
 
@@ -77,7 +79,7 @@ Full protocol: [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)
 ## Repository Structure
 
 ```
-q8-quadruped-imu-stabilization/
+Q8_Quadruped_IMU_Stabilization/
 ├── BalancePID/              Primary stabilization controller (research artifact)
 ├── Calibrate/               Joint calibration CLI
 ├── docs/
@@ -102,7 +104,7 @@ Experimental prototypes (`Trail/`, `stablisingrobotpid/`, etc.) are retained as 
   author    = {romil0001},
   title     = {Rombotics Q8: IMU-Based Static Stabilization for a Low-Cost Quadruped},
   year      = {2026},
-  url       = {https://github.com/romil0001/q8-quadruped-imu-stabilization},
+  url       = {https://github.com/romil0001/Q8_Quadruped_IMU_Stabilization},
   version   = {1.0.0}
 }
 ```
