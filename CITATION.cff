@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software in academic work, please cite it as below."
+title: "Rombotics Q8: IMU-Based Static Stabilization for a Low-Cost Quadruped"
+version: 1.0.0
+date-released: 2026-08-25
+url: "https://github.com/romil0001/rombotics-q8"
+repository-code: "https://github.com/romil0001/rombotics-q8"
+license: MIT
+type: software
+keywords:
+  - quadruped robot
+  - IMU stabilization
+  - PID control
+  - MPU6050
+  - legged robotics
+  - open source
+authors:
+  - family-names: romil0001
+    affiliation: "Update with your university / lab name"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+abstract: >
+  Open-source firmware and documentation for static pose stabilization of an
+  eight-degree-of-freedom quadruped robot using MPU6050 inertial sensing and
+  decoupled three-axis PID control with femur-tibia joint mirroring.

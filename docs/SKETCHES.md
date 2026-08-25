@@ -1,6 +1,20 @@
 # Firmware Sketches
 
-Each folder at the repository root is an independent Arduino sketch. Open one folder in the Arduino IDE (or PlatformIO) at a time.
+Each folder at the repository root is an independent Arduino sketch. For research context, see [RESEARCH.md](RESEARCH.md) and [EXPERIMENTS.md](EXPERIMENTS.md).
+
+## Research phase index
+
+| Phase | Sketch | Role in study |
+|-------|--------|---------------|
+| 0 | `Calibrate/`, `Home_position/`, `Auto_Calibration*` | Joint characterization and pose presets |
+| 1 | `Mpu_one_leg_success/` | Single-leg IMU feedback validation |
+| 2 | `servowithmpu/`, `tiltwithservo/` | Direct tilt mapping baseline (no PID) |
+| 3 | `Trail/` | 4-DOF femur-only PID ablation |
+| 4 | `stablisingrobot/`, `stablisingrobotpid/` | Hybrid servo + stepper actuation |
+| **5** | **`BalancePID/`** | **Primary result — full 8-DOF PID + mirroring** |
+| 6 | `NovaSM3/`, `testtilt1/` | Locomotion platform integration |
+
+---
 
 ## Recommended starting points
 
@@ -11,18 +25,22 @@ Each folder at the repository root is an independent Arduino sketch. Open one fo
 | **Home_position** | Move all 8 servos to calibrated home angles. |
 | **Auto_Calibration_Pulse** | Scripted motion between two preset poses using calibrated pulse limits. |
 
+---
+
 ## Balancing & stabilization
 
 | Sketch | Description |
 |--------|-------------|
-| `BalancePID/` | Modular PID balance control (recommended). Config in `pid_config.h`, limits in `ServoLimits.h`. |
-| `Trail/` | Earlier 4-servo thruster PID prototype (top joints only). |
+| `BalancePID/` | Modular PID balance control (primary research artifact). Config in `pid_config.h`, limits in `ServoLimits.h`. |
+| `Trail/` | Earlier 4-servo thruster PID prototype (top joints only). Ablation baseline. |
 | `testtilt1/` | Nova-style async servo balancing on one configuration. |
 | `stablisingrobot/` | Basic pitch/roll → servo mapping with optional stepper shoulder control. |
-| `stablisingrobotpid/` | Same concept with AccelStepper and PID. |
-| `servowithmpu/` | Simple MPU6050 tilt → 4 servo PWM demo. |
-| `tiltwithservo/` | Adafruit MPU6050 + PCA9685 tilt response. |
-| `Mpu_one_leg_success/` | Single-leg (RF) MPU-driven angle control experiment. |
+| `stablisingrobotpid/` | Same concept with AccelStepper and PID. Hybrid actuation study. |
+| `servowithmpu/` | Simple MPU6050 tilt → 4 servo PWM demo. Phase 2 baseline. |
+| `tiltwithservo/` | Adafruit MPU6050 + PCA9685 tilt response. Phase 2 baseline. |
+| `Mpu_one_leg_success/` | Single-leg (RF) MPU-driven angle control. Phase 1 validation. |
+
+---
 
 ## Calibration & motion presets
 
@@ -35,6 +53,8 @@ Each folder at the repository root is an independent Arduino sketch. Open one fo
 | `Tallest_position/` | Move all legs to fully extended pose. |
 | `Shortest_position/` | Move all legs to fully retracted pose. |
 
+---
+
 ## Stepper & hardware tests
 
 | Sketch | Description |
@@ -44,11 +64,15 @@ Each folder at the repository root is an independent Arduino sketch. Open one fo
 | `servofromesp/` | ESP32 direct servo PWM test. |
 | `Withoutpwmcode/` | Minimal servo control without PWM driver. |
 
+---
+
 ## Full robot platform
 
 | Sketch | Description |
 |--------|-------------|
-| `NovaSM3/` | Nova Spot-Micro clone v5.1 (Teensy 4.0). PS2 remote, gaits, OLED, MP3, RGB. Requires Teensy-specific libraries. |
+| `NovaSM3/` | Nova Spot-Micro clone v5.1 (Teensy 4.0). PS2 remote, gaits, OLED, MP3, RGB. Phase 6 integration target. |
+
+---
 
 ## Servo naming convention
 
@@ -60,6 +84,8 @@ Each leg has two joints:
 - **B** / bottom / tibia — lower joint (PCA9685 channels 0–3)
 
 Example: `RFT` = right front top, `LFB` = left front bottom.
+
+---
 
 ## PCA9685 channel map (BalancePID)
 
@@ -73,3 +99,17 @@ Example: `RFT` = right front top, `LFB` = left front bottom.
 | 5 | LRT |
 | 6 | RRT |
 | 7 | RFT |
+
+---
+
+## Research data logging
+
+Enable CSV serial output in `BalancePID/pid_config.h`:
+
+```cpp
+#define RESEARCH_LOG 1
+```
+
+Columns: `time_ms, pitch, roll, yaw, pid_pitch, pid_roll, pid_yaw, smooth_pitch, smooth_roll, smooth_yaw`
+
+See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for capture and analysis instructions.

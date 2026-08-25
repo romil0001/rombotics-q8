@@ -1,82 +1,118 @@
 # Rombotics Q8
 
-A quadruped robot firmware collection for an 8-servo legged platform with MPU6050-based self-balancing. The project includes calibration tools, motion presets, PID stabilization experiments, and a Nova Spot-Micro clone base platform.
+**IMU-based static stabilization for a low-cost 8-DOF quadruped robot**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Research Docs](https://img.shields.io/badge/docs-research-green.svg)](docs/RESEARCH.md)
+
+This repository contains the **firmware, calibration tools, and research documentation** for the Rombotics Q8 quadruped platform — an open experimental testbed for studying pose recovery using MPU6050 inertial sensing and decoupled PID control across eight servo-actuated joints.
+
+> **For academic use:** Start with [docs/RESEARCH.md](docs/RESEARCH.md) for the research overview, methodology, and citation information.
+
+---
+
+## Research at a Glance
+
+| | |
+|---|---|
+| **Problem** | Static pose stabilization on a low-cost quadruped using IMU feedback |
+| **Approach** | Decoupled 3-axis PID (pitch / roll / yaw) with femur–tibia mirroring |
+| **Platform** | 8 servos, MPU6050, PCA9685, ESP32 |
+| **Primary artifact** | [`BalancePID/BalancePID.ino`](BalancePID/BalancePID.ino) |
+| **Data logging** | CSV serial output via `RESEARCH_LOG` in `pid_config.h` |
+
+```mermaid
+flowchart LR
+    IMU[MPU6050] --> PID[3-axis PID]
+    PID --> MAP[Leg mapping]
+    MAP --> MIRROR[Joint mirroring]
+    MIRROR --> SRV[8 servos]
+```
+
+---
+
+## Documentation
+
+| Document | Audience | Contents |
+|----------|----------|----------|
+| [**RESEARCH.md**](docs/RESEARCH.md) | Supervisors, reviewers | Abstract, contributions, architecture |
+| [**METHODOLOGY.md**](docs/METHODOLOGY.md) | Methods chapter | Control law, calibration, metrics |
+| [**EXPERIMENTS.md**](docs/EXPERIMENTS.md) | Lab notebook | Phase-by-phase experimental design |
+| [**REPRODUCIBILITY.md**](docs/REPRODUCIBILITY.md) | Independent replicators | Step-by-step replication guide |
+| [**REFERENCES.md**](docs/REFERENCES.md) | Literature review | Bibliography and prior art |
+| [**SKETCHES.md**](docs/SKETCHES.md) | Developers | Firmware catalog |
+
+---
+
+## Quick Start (Replication)
+
+1. Clone the repository and configure the Arduino IDE with the vendored `libraries/` folder.
+2. Calibrate joints using [`Calibrate/Calibrate.ino`](Calibrate/Calibrate.ino) → update [`BalancePID/ServoLimits.h`](BalancePID/ServoLimits.h).
+3. Upload [`BalancePID/BalancePID.ino`](BalancePID/BalancePID.ino) with the robot on a level surface.
+4. Enable CSV logging for experiments:
+   ```cpp
+   // BalancePID/pid_config.h
+   #define RESEARCH_LOG 1
+   ```
+5. Capture serial output at 115200 baud and analyze per [REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
+
+Full protocol: [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)
+
+---
 
 ## Hardware
 
 | Component | Role |
 |-----------|------|
-| **MCU** | ESP32 or Teensy 4.0 (sketch-dependent) |
-| **MPU6050** | 6-axis IMU for pitch, roll, and yaw |
-| **PCA9685** | 16-channel I2C PWM driver for 8 servos |
-| **8× servos** | 2 per leg (femur + tibia), 4 legs |
-| **Stepper motors** | Optional shoulder actuators (stabilization experiments) |
+| ESP32 / Teensy 4.0 | Microcontroller (sketch-dependent) |
+| MPU6050 | 6-axis IMU (pitch, roll, yaw estimation) |
+| PCA9685 | 16-channel I2C PWM driver (8 servos) |
+| 8× RC servos | 2 per leg — femur + tibia |
+| Stepper motors (optional) | Hybrid actuation experiments |
 
-### Wiring (typical BalancePID setup)
+**I2C (BalancePID):** SDA → GPIO 21, SCL → GPIO 22 · PCA9685 @ `0x40` · MPU6050 @ `0x68`
 
-- **I2C:** SDA → GPIO 21, SCL → GPIO 22 (ESP32 defaults)
-- **PCA9685 address:** `0x40`
-- **MPU6050 address:** `0x68`
-- Servo PWM channels are documented in [docs/SKETCHES.md](docs/SKETCHES.md)
+---
 
-## Quick start
-
-1. **Install [Arduino IDE](https://www.arduino.cc/en/software)** (2.x recommended) or use PlatformIO.
-2. **Add board support** for your MCU (ESP32 or Teensy).
-3. **Install libraries** — vendored copies live in [`libraries/`](libraries/). Point the IDE library path here, or copy needed libraries into your global `Arduino/libraries` folder:
-   - Adafruit PWM Servo Driver Library
-   - Adafruit BusIO
-   - MPU6050_tockn (for BalancePID)
-4. **Open a sketch** — start with [`BalancePID/BalancePID.ino`](BalancePID/BalancePID.ino).
-5. **Calibrate servos** — run [`Calibrate/Calibrate.ino`](Calibrate/Calibrate.ino) and update limits in `ServoLimits.h`.
-6. **Upload** and open Serial Monitor at **115200 baud**.
-
-## Project structure
+## Repository Structure
 
 ```
 rombotics-q8/
-├── BalancePID/          ← Recommended main balancing firmware
-├── Calibrate/           ← Servo calibration CLI
-├── Auto_Calibration*/   ← Scripted pose sequences
-├── NovaSM3/             ← Full Spot-Micro clone (Teensy)
-├── libraries/           ← Vendored Arduino dependencies
-└── docs/
-    └── SKETCHES.md      ← Index of every sketch
+├── BalancePID/              Primary stabilization controller (research artifact)
+├── Calibrate/               Joint calibration CLI
+├── docs/
+│   ├── RESEARCH.md          Research overview and contributions
+│   ├── METHODOLOGY.md       Control formulation and protocols
+│   ├── EXPERIMENTS.md       Experimental phases 0–6
+│   ├── REPRODUCIBILITY.md   Replication guide
+│   └── REFERENCES.md        Bibliography
+├── CITATION.cff             Academic citation metadata
+├── NovaSM3/                 Full Spot-Micro locomotion platform
+└── libraries/               Vendored Arduino dependencies
 ```
 
-See [docs/SKETCHES.md](docs/SKETCHES.md) for a complete sketch catalog.
+Experimental prototypes (`Trail/`, `stablisingrobotpid/`, etc.) are retained as **ablation baselines** — see [EXPERIMENTS.md](docs/EXPERIMENTS.md).
 
-## BalancePID tuning
+---
 
-Edit [`BalancePID/pid_config.h`](BalancePID/pid_config.h) to adjust PID gains:
+## Citation
 
-```cpp
-const float kp_pitch = 1.5;
-const float ki_pitch = 0.1;
-const float kd_pitch = 0.2;
+```bibtex
+@software{rombotics_q8_2026,
+  author    = {romil0001},
+  title     = {Rombotics Q8: IMU-Based Static Stabilization for a Low-Cost Quadruped},
+  year      = {2026},
+  url       = {https://github.com/romil0001/rombotics-q8},
+  version   = {1.0.0}
+}
 ```
 
-Edit [`BalancePID/ServoLimits.h`](BalancePID/ServoLimits.h) with per-servo `{min, home, max}` pulse widths after calibration.
+See also [CITATION.cff](CITATION.cff). Update author, affiliation, and ORCID before thesis submission.
 
-The firmware:
-
-1. Calibrates gyro offsets on boot
-2. Captures a baseline orientation as "level"
-3. Runs independent PID loops on pitch, roll, and yaw
-4. Applies smoothed corrections to 4 top servos
-5. Mirrors bottom servos proportionally via `Helpers.h`
-
-## Development notes
-
-- **Case-sensitive includes:** Header filenames must match exactly on Linux/macOS (`ServoLimits.h`, not `servolimits.h`).
-- **NovaSM3:** The full robot sketch targets Teensy 4.0 and requires additional libraries (PS2X, DFPlayer, etc.). Disable unused features via the `*_active` flags at the top of `NovaSM3.ino`.
-- **Experimental sketches:** Folders like `stablisingrobot/` and `Trail/` are earlier prototypes kept for reference.
+---
 
 ## License
 
 MIT — see [LICENSE](LICENSE). Third-party libraries in `libraries/` retain their original licenses.
 
-## Credits
-
-- Nova Spot-Micro clone base: [Chris Locke / NovaSM3](https://github.com/cguweb-com/Arduino-Projects/tree/main/Nova-SM3)
-- Custom balancing and calibration work: rombotics-q8 contributors
+**Prior art:** Nova Spot-Micro clone base by [Chris Locke](https://github.com/cguweb-com/Arduino-Projects/tree/main/Nova-SM3).
